@@ -1,0 +1,32 @@
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../services/api';
+
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+
+    const login = async (username, password) => {
+        const response = await api.post('/auth/signin', { username, password });
+        localStorage.setItem('user', JSON.stringify(response.data));
+        setUser(response.data);
+        return response.data;
+    };
+
+    const logout = () => {
+        localStorage.removeItem('user');
+        setUser(null);
+    };
+
+    const register = async (userData) => {
+        return await api.post('/auth/signup', userData);
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, login, logout, register }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => useContext(AuthContext);
