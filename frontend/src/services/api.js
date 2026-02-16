@@ -28,6 +28,20 @@ api.getAllDecisions = () => api.get('/decisions');
 api.createDecision = (data) => api.post('/decisions', data);
 api.deleteDecision = (id) => api.delete(`/decisions/${id}`);
 
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        console.error('API Error Details:', {
+            url: error.config?.url,
+            method: error.config?.method,
+            status: error.response?.status,
+            data: error.response?.data,
+            message: error.message
+        });
+        return Promise.reject(error);
+    }
+);
+
 api.interceptors.request.use((config) => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.token) {
