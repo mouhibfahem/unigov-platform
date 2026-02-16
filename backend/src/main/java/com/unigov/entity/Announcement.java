@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
+
 @Document(collection = "announcements")
 public class Announcement {
     @Id
@@ -21,7 +23,7 @@ public class Announcement {
 
     private String attachmentUrl;
 
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime createdAt;
 
     public Announcement() {

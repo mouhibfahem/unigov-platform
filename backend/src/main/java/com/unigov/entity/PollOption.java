@@ -21,7 +21,7 @@ public class PollOption {
     public PollOption() {
     }
 
-    public PollOption(Long id, String text, int votes, Poll poll) {
+    public PollOption(String id, String text, int votes, Poll poll) {
         this.id = id;
         this.text = text;
         this.votes = votes;
