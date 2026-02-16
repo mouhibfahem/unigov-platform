@@ -20,8 +20,5 @@ EXPOSE 8081
 
 RUN mkdir uploads
 
-# Start the application using variables from Railway
-ENTRYPOINT java -Dserver.port=${PORT} \
-    -Dspring.data.mongodb.uri=${MONGODB_URI} \
-    -Dunigov.app.jwtSecret=${JWT_SECRET} \
-    -Xmx512m -jar app.jar
+# Start the application with quoted variables to handle special characters
+ENTRYPOINT ["/bin/sh", "-c", "java -Dserver.port=$PORT -Dspring.data.mongodb.uri=\"$MONGODB_URI\" -Dunigov.app.jwtSecret=\"$JWT_SECRET\" -Xmx512m -jar app.jar"]
