@@ -4,6 +4,8 @@ const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8081/api',
 });
 
+console.log('API Base URL:', api.defaults.baseURL);
+
 api.updateProfile = (data) => api.put('/users/profile', data);
 api.uploadPhoto = (formData) => api.post('/users/photo', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }

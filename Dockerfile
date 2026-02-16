@@ -21,4 +21,4 @@ EXPOSE 8081
 RUN mkdir uploads
 
 # Start the application using the $PORT provided by Railway
-ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]
+ENTRYPOINT java -Dserver.port=${PORT} -Xmx512m -jar app.jar
