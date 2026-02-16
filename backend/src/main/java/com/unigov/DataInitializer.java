@@ -6,6 +6,7 @@ import com.unigov.repository.UserRepository;
 import com.unigov.repository.ComplaintRepository;
 import com.unigov.repository.PollRepository;
 import com.unigov.repository.EventRepository;
+import com.unigov.repository.DecisionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -21,17 +22,20 @@ public class DataInitializer implements CommandLineRunner {
     private final ComplaintRepository complaintRepository;
     private final PollRepository pollRepository;
     private final EventRepository eventRepository;
+    private final DecisionRepository decisionRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepository userRepository,
             ComplaintRepository complaintRepository,
             PollRepository pollRepository,
             EventRepository eventRepository,
+            DecisionRepository decisionRepository,
             PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.complaintRepository = complaintRepository;
         this.pollRepository = pollRepository;
         this.eventRepository = eventRepository;
+        this.decisionRepository = decisionRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -222,6 +226,23 @@ public class DataInitializer implements CommandLineRunner {
                     com.unigov.entity.Event.EventType.EXAM));
 
             logger.info("=== Events seeded ===");
+        }
+
+        // Seed Decisions
+        if (decisionRepository.count() == 0) {
+            decisionRepository.save(new com.unigov.entity.Decision(
+                    "Nouveaux Horaires de la Bibliothèque",
+                    "À partir du lundi prochain, la bibliothèque sera ouverte de 08h00 à 20h00 sans interruption.",
+                    "Infrastructure"));
+            decisionRepository.save(new com.unigov.entity.Decision(
+                    "Report des Examens de TP",
+                    "Les examens de travaux pratiques prévus pour mardi sont reportés à une date ultérieure.",
+                    "Académique"));
+            decisionRepository.save(new com.unigov.entity.Decision(
+                    "Charte de Conduite sur le Campus",
+                    "Adoption de la nouvelle charte de conduite visant à améliorer le respect mutuel.",
+                    "Discipline"));
+            logger.info("=== Decisions seeded ===");
         }
     }
 

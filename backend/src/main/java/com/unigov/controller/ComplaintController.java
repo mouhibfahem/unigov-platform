@@ -60,14 +60,14 @@ public class ComplaintController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('DELEGUE', 'ADMIN')")
-    public ResponseEntity<ComplaintResponse> updateComplaint(@PathVariable Long id,
+    public ResponseEntity<ComplaintResponse> updateComplaint(@PathVariable String id,
             @RequestBody ComplaintUpdate update) {
         return ResponseEntity.ok(complaintService.updateComplaint(id, update));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('DELEGUE', 'ADMIN')")
-    public ResponseEntity<?> deleteComplaint(@PathVariable Long id) {
+    public ResponseEntity<?> deleteComplaint(@PathVariable String id) {
         complaintService.deleteComplaint(id);
         return ResponseEntity.ok().build();
     }

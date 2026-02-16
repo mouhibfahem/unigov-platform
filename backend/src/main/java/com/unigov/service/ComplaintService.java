@@ -48,6 +48,7 @@ public class ComplaintService {
         return mapToResponse(saved);
     }
 
+    @Transactional(readOnly = true)
     public List<ComplaintResponse> getMyComplaints(String username) {
         User student = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -56,6 +57,7 @@ public class ComplaintService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<ComplaintResponse> getAllComplaints() {
         return complaintRepository.findAll().stream()
                 .map(this::mapToResponse)
@@ -63,7 +65,7 @@ public class ComplaintService {
     }
 
     @Transactional
-    public ComplaintResponse updateComplaint(Long id, ComplaintUpdate update) {
+    public ComplaintResponse updateComplaint(String id, ComplaintUpdate update) {
         Complaint complaint = complaintRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Complaint not found"));
 
@@ -81,7 +83,7 @@ public class ComplaintService {
     }
 
     @Transactional
-    public void deleteComplaint(Long id) {
+    public void deleteComplaint(String id) {
         logger.info("Attempting to delete complaint with ID: {}", id);
         Complaint complaint = complaintRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Complaint not found"));

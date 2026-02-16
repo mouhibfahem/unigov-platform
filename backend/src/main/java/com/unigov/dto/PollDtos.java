@@ -26,17 +26,17 @@ public class PollDtos {
     }
 
     public static class PollResponse {
-        private Long id;
+        private String id;
         private String question;
         private List<OptionResponse> options;
         private boolean active;
         private LocalDateTime createdAt;
 
-        public Long getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(Long id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -79,7 +79,7 @@ public class PollDtos {
         public static class Builder {
             private PollResponse instance = new PollResponse();
 
-            public Builder id(Long id) {
+            public Builder id(String id) {
                 instance.id = id;
                 return this;
             }
@@ -111,15 +111,15 @@ public class PollDtos {
     }
 
     public static class OptionResponse {
-        private Long id;
+        private String id;
         private String text;
         private int votes;
 
-        public Long getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(Long id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -146,7 +146,7 @@ public class PollDtos {
         public static class Builder {
             private OptionResponse instance = new OptionResponse();
 
-            public Builder id(Long id) {
+            public Builder id(String id) {
                 instance.id = id;
                 return this;
             }

@@ -45,7 +45,7 @@ public class ComplaintDtos {
     }
 
     public static class ComplaintResponse {
-        private Long id;
+        private String id;
         private String title;
         private String description;
         private String category;
@@ -56,11 +56,11 @@ public class ComplaintDtos {
         private String attachmentPath;
         private LocalDateTime createdAt;
 
-        public Long getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(Long id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -143,7 +143,7 @@ public class ComplaintDtos {
         public static class Builder {
             private ComplaintResponse instance = new ComplaintResponse();
 
-            public Builder id(Long id) {
+            public Builder id(String id) {
                 instance.id = id;
                 return this;
             }

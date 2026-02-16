@@ -46,7 +46,7 @@ const Header = ({ title }) => {
                     <div className="w-10 h-10 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center font-bold relative overflow-hidden group-hover/profile:shadow-md group-hover/profile:bg-primary-600 group-hover/profile:text-white transition-all">
                         {user?.profilePhoto ? (
                             <img
-                                src={user.profilePhoto.startsWith('http') ? user.profilePhoto : `http://localhost:8081/uploads/${user.profilePhoto}`}
+                                src={user.profilePhoto.startsWith('http') ? user.profilePhoto : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8081'}/uploads/${user.profilePhoto}`}
                                 alt="Profile"
                                 className="w-full h-full object-cover"
                             />

@@ -27,7 +27,7 @@ public class MessageController {
     }
 
     @GetMapping("/history/{userId}")
-    public ResponseEntity<List<MessageResponse>> getConversation(@PathVariable Long userId, Principal principal) {
+    public ResponseEntity<List<MessageResponse>> getConversation(@PathVariable String userId, Principal principal) {
         return ResponseEntity.ok(messageService.getConversation(userId, principal.getName()));
     }
 

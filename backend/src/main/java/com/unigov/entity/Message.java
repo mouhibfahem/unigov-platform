@@ -1,24 +1,21 @@
 package com.unigov.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "messages")
+@Document(collection = "messages")
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
+    @DBRef
     private User sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipient_id", nullable = false)
+    @DBRef
     private User recipient;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     private LocalDateTime timestamp;
@@ -35,11 +32,11 @@ public class Message {
         this.timestamp = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -6,7 +6,7 @@ public class MessageDtos {
 
     public static class MessageRequest {
         private String content;
-        private Long recipientId;
+        private String recipientId;
 
         public MessageRequest() {
         }
@@ -19,33 +19,33 @@ public class MessageDtos {
             this.content = content;
         }
 
-        public Long getRecipientId() {
+        public String getRecipientId() {
             return recipientId;
         }
 
-        public void setRecipientId(Long recipientId) {
+        public void setRecipientId(String recipientId) {
             this.recipientId = recipientId;
         }
     }
 
     public static class MessageResponse {
-        private Long id;
+        private String id;
         private String content;
         private String senderUsername;
         private String recipientUsername;
-        private Long senderId;
-        private Long recipientId;
+        private String senderId;
+        private String recipientId;
         private LocalDateTime timestamp;
         private boolean isRead;
 
         public MessageResponse() {
         }
 
-        public Long getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(Long id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -73,19 +73,19 @@ public class MessageDtos {
             this.recipientUsername = recipientUsername;
         }
 
-        public Long getSenderId() {
+        public String getSenderId() {
             return senderId;
         }
 
-        public void setSenderId(Long senderId) {
+        public void setSenderId(String senderId) {
             this.senderId = senderId;
         }
 
-        public Long getRecipientId() {
+        public String getRecipientId() {
             return recipientId;
         }
 
-        public void setRecipientId(Long recipientId) {
+        public void setRecipientId(String recipientId) {
             this.recipientId = recipientId;
         }
 
@@ -112,7 +112,7 @@ public class MessageDtos {
         public static class Builder {
             private MessageResponse instance = new MessageResponse();
 
-            public Builder id(Long id) {
+            public Builder id(String id) {
                 instance.id = id;
                 return this;
             }
@@ -122,7 +122,7 @@ public class MessageDtos {
                 return this;
             }
 
-            public Builder senderId(Long senderId) {
+            public Builder senderId(String senderId) {
                 instance.senderId = senderId;
                 return this;
             }
@@ -132,7 +132,7 @@ public class MessageDtos {
                 return this;
             }
 
-            public Builder recipientId(Long recipientId) {
+            public Builder recipientId(String recipientId) {
                 instance.recipientId = recipientId;
                 return this;
             }
@@ -159,7 +159,7 @@ public class MessageDtos {
     }
 
     public static class ConversationResponse {
-        private Long otherUserId;
+        private String otherUserId;
         private String otherUserName;
         private String lastMessage;
         private LocalDateTime lastTimestamp;
@@ -168,11 +168,11 @@ public class MessageDtos {
         public ConversationResponse() {
         }
 
-        public Long getOtherUserId() {
+        public String getOtherUserId() {
             return otherUserId;
         }
 
-        public void setOtherUserId(Long otherUserId) {
+        public void setOtherUserId(String otherUserId) {
             this.otherUserId = otherUserId;
         }
 
@@ -215,7 +215,7 @@ public class MessageDtos {
         public static class Builder {
             private ConversationResponse instance = new ConversationResponse();
 
-            public Builder otherUserId(Long otherUserId) {
+            public Builder otherUserId(String otherUserId) {
                 instance.otherUserId = otherUserId;
                 return this;
             }
@@ -247,7 +247,7 @@ public class MessageDtos {
     }
 
     public static class ContactResponse {
-        private Long id;
+        private String id;
         private String username;
         private String fullName;
         private String role;
@@ -256,11 +256,11 @@ public class MessageDtos {
         public ContactResponse() {
         }
 
-        public Long getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(Long id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -303,7 +303,7 @@ public class MessageDtos {
         public static class Builder {
             private ContactResponse instance = new ContactResponse();
 
-            public Builder id(Long id) {
+            public Builder id(String id) {
                 instance.id = id;
                 return this;
             }

@@ -57,7 +57,7 @@ public class PollService {
         }
 
         @Transactional
-        public void vote(Long optionId) {
+        public void vote(String optionId) {
                 PollOption option = pollOptionRepository.findById(optionId)
                                 .orElseThrow(() -> new RuntimeException("Option not found"));
                 option.setVotes(option.getVotes() + 1);

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class UserDetailsImpl implements UserDetails {
-    private Long id;
+    private String id;
     private String username;
     private String email;
 
@@ -23,7 +23,7 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password,
+    public UserDetailsImpl(String id, String username, String email, String password,
             String fullName, String profilePhoto,
             Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
@@ -53,7 +53,7 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

@@ -42,7 +42,7 @@ public class MessageService {
         }
 
         @Transactional(readOnly = true)
-        public List<MessageResponse> getConversation(Long otherUserId, String currentUsername) {
+        public List<MessageResponse> getConversation(String otherUserId, String currentUsername) {
                 User currentUser = userRepository.findByUsername(currentUsername)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
                 User otherUser = userRepository.findById(otherUserId)
@@ -64,7 +64,16 @@ public class MessageService {
                 User currentUser = userRepository.findByUsername(currentUsername)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-                List<User> participants = messageRepository.findParticipantIdsInConversationWith(currentUser.getId());
+                List<Message> userMessages = messageRepository.findAll().stream()
+                                .filter(m -> m.getSender().getId().equals(currentUser.getId()) ||
+                                                m.getRecipient().getId().equals(currentUser.getId()))
+                                .collect(Collectors.toList());
+
+                List<User> participants = userMessages.stream()
+                                .map(m -> m.getSender().getId().equals(currentUser.getId()) ? m.getRecipient()
+                                                : m.getSender())
+                                .distinct()
+                                .collect(Collectors.toList());
 
                 return participants.stream()
                                 .map(otherUser -> {

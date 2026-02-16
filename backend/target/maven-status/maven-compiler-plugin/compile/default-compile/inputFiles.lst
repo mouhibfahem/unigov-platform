@@ -3,6 +3,7 @@ C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\config\WebConfi
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\controller\AnnouncementController.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\controller\AuthController.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\controller\ComplaintController.java
+C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\controller\EventController.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\controller\MessageController.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\controller\PollController.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\controller\UserController.java
@@ -15,6 +16,7 @@ C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\dto\PollDtos.ja
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\entity\Announcement.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\entity\Complaint.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\entity\ComplaintEnums.java
+C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\entity\Event.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\entity\Message.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\entity\Poll.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\entity\PollOption.java
@@ -23,6 +25,7 @@ C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\entity\User.jav
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\exception\GlobalExceptionHandler.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\repository\AnnouncementRepository.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\repository\ComplaintRepository.java
+C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\repository\EventRepository.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\repository\MessageRepository.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\repository\PollOptionRepository.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\repository\PollRepository.java
@@ -34,6 +37,7 @@ C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\security\UserDe
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\security\WebSecurityConfig.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\service\AnnouncementService.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\service\ComplaintService.java
+C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\service\EventService.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\service\FileStorageService.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\service\MessageService.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\service\PollService.java

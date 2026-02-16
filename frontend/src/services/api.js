@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8081/api',
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8081/api',
 });
 
 api.updateProfile = (data) => api.put('/users/profile', data);
@@ -20,6 +20,11 @@ api.getContacts = () => api.get('/messages/contacts');
 // Agenda / Events
 api.getUpcomingEvents = () => api.get('/events/upcoming');
 api.createEvent = (data) => api.post('/events', data);
+
+// Decisions
+api.getAllDecisions = () => api.get('/decisions');
+api.createDecision = (data) => api.post('/decisions', data);
+api.deleteDecision = (id) => api.delete(`/decisions/${id}`);
 
 api.interceptors.request.use((config) => {
     const user = JSON.parse(localStorage.getItem('user'));

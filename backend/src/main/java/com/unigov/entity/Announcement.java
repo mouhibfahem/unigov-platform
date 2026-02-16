@@ -1,27 +1,22 @@
 package com.unigov.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "announcements")
+@Document(collection = "announcements")
 public class Announcement {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @NotBlank
     private String title;
 
-    @NotBlank
-    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "delegate_id")
+    @DBRef
     private User delegate;
 
     private String attachmentUrl;
@@ -32,7 +27,7 @@ public class Announcement {
     public Announcement() {
     }
 
-    public Announcement(Long id, String title, String content, User delegate, LocalDateTime createdAt) {
+    public Announcement(String id, String title, String content, User delegate, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -40,11 +35,11 @@ public class Announcement {
         this.createdAt = createdAt;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,39 +1,35 @@
 package com.unigov.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "polls")
+@Document(collection = "polls")
 public class Poll {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @NotBlank
     private String question;
 
-    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
+    @DBRef
     private List<PollOption> options = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "creator_id")
+    @DBRef
     private User creator;
 
     private boolean active = true;
 
-    @CreationTimestamp
     private LocalDateTime createdAt;
 
     public Poll() {
     }
 
-    public Poll(Long id, String question, List<PollOption> options, User creator, boolean active,
+    public Poll(String id, String question, List<PollOption> options, User creator, boolean active,
             LocalDateTime createdAt) {
         this.id = id;
         this.question = question;
@@ -43,11 +39,11 @@ public class Poll {
         this.createdAt = createdAt;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

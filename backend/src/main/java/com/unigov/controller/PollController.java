@@ -29,7 +29,7 @@ public class PollController {
     }
 
     @PostMapping("/{optionId}/vote")
-    public ResponseEntity<?> vote(@PathVariable Long optionId) {
+    public ResponseEntity<?> vote(@PathVariable String optionId) {
         pollService.vote(optionId);
         return ResponseEntity.ok().build();
     }

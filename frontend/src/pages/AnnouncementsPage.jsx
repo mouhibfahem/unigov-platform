@@ -123,7 +123,7 @@ const AnnouncementsPage = () => {
                                     <div className="mb-6">
                                         {announcement.attachmentUrl.toLowerCase().endsWith('.pdf') ? (
                                             <a
-                                                href={`http://localhost:8081/uploads/${announcement.attachmentUrl}`}
+                                                href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8081'}/uploads/${announcement.attachmentUrl}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex items-center gap-2 p-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-sm border border-red-100"
@@ -133,7 +133,7 @@ const AnnouncementsPage = () => {
                                             </a>
                                         ) : (
                                             <img
-                                                src={`http://localhost:8081/uploads/${announcement.attachmentUrl}`}
+                                                src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8081'}/uploads/${announcement.attachmentUrl}`}
                                                 alt="Attachment"
                                                 className="w-full h-48 object-cover rounded-lg border border-slate-100"
                                             />

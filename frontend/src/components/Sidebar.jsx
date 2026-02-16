@@ -38,7 +38,7 @@ const Sidebar = () => {
         {
             title: 'RÉCLAMATIONS',
             items: [
-                { icon: Gavel, label: 'Suivi des décisions', path: '/complaints' }
+                { icon: Gavel, label: 'Réclamations', path: '/complaints' }
             ]
         },
         {
@@ -46,6 +46,7 @@ const Sidebar = () => {
             items: [
                 { icon: Scale, label: 'Règlement interne', path: '/regulations' },
                 { icon: ListOrdered, label: 'Procédures', path: '/procedures' },
+                { icon: ClipboardList, label: 'Suivi des décisions', path: '/decisions' },
                 { icon: ClipboardList, label: 'Enquêtes', path: '/surveys' }
             ]
         },

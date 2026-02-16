@@ -1,9 +1,9 @@
 package com.unigov.repository;
 
 import com.unigov.entity.PollOption;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PollOptionRepository extends JpaRepository<PollOption, Long> {
+public interface PollOptionRepository extends MongoRepository<PollOption, String> {
 }

@@ -1,44 +1,36 @@
 package com.unigov.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "complaints")
+@Document(collection = "complaints")
 public class Complaint {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @NotBlank
     private String title;
 
     @NotBlank
-    @Column(columnDefinition = "TEXT")
     private String description;
 
     @NotBlank
     private String category;
 
-    @Enumerated(EnumType.STRING)
     private ComplaintEnums.ComplaintStatus status;
 
-    @Enumerated(EnumType.STRING)
     private ComplaintEnums.ComplaintPriority priority;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id")
+    @DBRef
     private User student;
 
-    @Column(columnDefinition = "TEXT")
     private String response;
 
     private String attachmentPath;
 
-    @CreationTimestamp
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -46,7 +38,8 @@ public class Complaint {
     public Complaint() {
     }
 
-    public Complaint(Long id, String title, String description, String category, ComplaintEnums.ComplaintStatus status,
+    public Complaint(String id, String title, String description, String category,
+            ComplaintEnums.ComplaintStatus status,
             ComplaintEnums.ComplaintPriority priority, User student, String response, String attachmentPath,
             LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
@@ -62,11 +55,11 @@ public class Complaint {
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

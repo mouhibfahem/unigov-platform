@@ -38,18 +38,18 @@ public class AnnouncementDtos {
     }
 
     public static class AnnouncementResponse {
-        private Long id;
+        private String id;
         private String title;
         private String content;
         private String attachmentUrl;
         private String delegateName;
         private LocalDateTime createdAt;
 
-        public Long getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(Long id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -100,7 +100,7 @@ public class AnnouncementDtos {
         public static class Builder {
             private AnnouncementResponse instance = new AnnouncementResponse();
 
-            public Builder id(Long id) {
+            public Builder id(String id) {
                 instance.id = id;
                 return this;
             }

@@ -110,7 +110,7 @@ const SettingsPage = () => {
                                         >
                                             {user?.profilePhoto ? (
                                                 <img
-                                                    src={user.profilePhoto.startsWith('http') ? user.profilePhoto : `http://localhost:8081/uploads/${user.profilePhoto}`}
+                                                    src={user.profilePhoto.startsWith('http') ? user.profilePhoto : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8081'}/uploads/${user.profilePhoto}`}
                                                     alt="Profile"
                                                     className="w-full h-full object-cover transition-transform hover:scale-110"
                                                 />
@@ -150,7 +150,7 @@ const SettingsPage = () => {
                                     >
                                         <div className="relative max-w-4xl max-h-[90vh]">
                                             <img
-                                                src={user.profilePhoto.startsWith('http') ? user.profilePhoto : `http://localhost:8081/uploads/${user.profilePhoto}`}
+                                                src={user.profilePhoto.startsWith('http') ? user.profilePhoto : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8081'}/uploads/${user.profilePhoto}`}
                                                 alt="Profile Full Size"
                                                 className="max-w-full max-h-[90vh] rounded-lg shadow-2xl"
                                                 onClick={(e) => e.stopPropagation()}

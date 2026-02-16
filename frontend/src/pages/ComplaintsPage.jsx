@@ -286,7 +286,7 @@ const ComplaintsPage = () => {
                                                 <>
                                                     <span>•</span>
                                                     <a
-                                                        href={`http://localhost:8080/uploads/${complaint.attachmentPath}`}
+                                                        href={`${import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8081'}/uploads/${complaint.attachmentPath}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="text-primary-600 font-bold hover:underline"

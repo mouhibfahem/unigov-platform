@@ -12,6 +12,8 @@ import ProceduresPage from './pages/ProceduresPage';
 import MessagingPage from './pages/MessagingPage';
 import SettingsPage from './pages/SettingsPage';
 import HomePage from './pages/HomePage';
+import DecisionsPage from './pages/DecisionsPage';
+import SurveysPage from './pages/SurveysPage';
 import './styles/index.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -70,7 +72,12 @@ const App = () => {
                         } />
                         <Route path="/decisions" element={
                             <ProtectedRoute>
-                                <div className="p-10 font-bold text-slate-400">Decision Tracking Module coming soon...</div>
+                                <DecisionsPage />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/surveys" element={
+                            <ProtectedRoute>
+                                <SurveysPage />
                             </ProtectedRoute>
                         } />
                         <Route path="/" element={<Navigate to="/dashboard" />} />

@@ -94,14 +94,14 @@ public class AuthDtos {
     public static class JwtResponse {
         private String token;
         private String type = "Bearer";
-        private Long id;
+        private String id;
         private String username;
         private String email;
         private String role;
         private String fullName;
         private String profilePhoto;
 
-        public JwtResponse(String accessToken, Long id, String username, String email, String role, String fullName,
+        public JwtResponse(String accessToken, String id, String username, String email, String role, String fullName,
                 String profilePhoto) {
             this.token = accessToken;
             this.id = id;
@@ -128,11 +128,11 @@ public class AuthDtos {
             this.type = type;
         }
 
-        public Long getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(Long id) {
+        public void setId(String id) {
             this.id = id;
         }
 

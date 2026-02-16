@@ -1,22 +1,21 @@
 package com.unigov.entity;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
 
-@Entity
-@Table(name = "poll_options")
+@Document(collection = "poll_options")
 public class PollOption {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @NotBlank
     private String text;
 
     private int votes = 0;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "poll_id")
+    @DBRef
     private Poll poll;
 
     public PollOption() {
@@ -29,11 +28,11 @@ public class PollOption {
         this.poll = poll;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
