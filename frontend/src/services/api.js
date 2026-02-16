@@ -11,6 +11,12 @@ api.uploadPhoto = (formData) => api.post('/users/photo', formData, {
 
 api.getCurrentUser = () => api.get('/users/me');
 
+// Messaging
+api.getConversations = () => api.get('/messages/conversations');
+api.getConversationHistory = (userId) => api.get(`/messages/history/${userId}`);
+api.sendMessage = (data) => api.post('/messages', data);
+api.getContacts = () => api.get('/messages/contacts');
+
 api.interceptors.request.use((config) => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.token) {
