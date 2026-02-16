@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogIn, User, Lock, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 import Logo from '../components/Logo';
+import api from '../services/api';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -91,13 +92,27 @@ const LoginPage = () => {
                     </button>
                 </form>
 
-                <div className="mt-8 pt-8 border-t border-slate-50 dark:border-slate-800 text-center">
+                <div className="mt-8 pt-8 border-t border-slate-50 dark:border-slate-800 text-center space-y-4">
                     <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
                         Pas encore de compte ?{' '}
                         <Link to="/register" className="text-primary-600 dark:text-primary-400 font-bold hover:underline underline-offset-4">
                             S'inscrire
                         </Link>
                     </p>
+
+                    <button
+                        onClick={async () => {
+                            try {
+                                await api.post('/auth/seed-all');
+                                alert('Base de données initialisée ! Essayez de vous connecter.');
+                            } catch (err) {
+                                alert('Erreur lors du seeding. Vérifiez que le backend est en ligne.');
+                            }
+                        }}
+                        className="text-[10px] text-slate-300 hover:text-slate-500 transition-colors uppercase tracking-widest font-black"
+                    >
+                        Réinitialiser les données de démo (Secours)
+                    </button>
                 </div>
             </div>
         </div>
