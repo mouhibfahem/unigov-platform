@@ -7,6 +7,7 @@ import com.unigov.repository.ComplaintRepository;
 import com.unigov.repository.PollRepository;
 import com.unigov.repository.EventRepository;
 import com.unigov.repository.DecisionRepository;
+import com.unigov.repository.PollOptionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -23,6 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     private final PollRepository pollRepository;
     private final EventRepository eventRepository;
     private final DecisionRepository decisionRepository;
+    private final PollOptionRepository pollOptionRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepository userRepository,
@@ -30,12 +32,14 @@ public class DataInitializer implements CommandLineRunner {
             PollRepository pollRepository,
             EventRepository eventRepository,
             DecisionRepository decisionRepository,
+            PollOptionRepository pollOptionRepository,
             PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.complaintRepository = complaintRepository;
         this.pollRepository = pollRepository;
         this.eventRepository = eventRepository;
         this.decisionRepository = decisionRepository;
+        this.pollOptionRepository = pollOptionRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -147,6 +151,11 @@ public class DataInitializer implements CommandLineRunner {
 
                 p1.getOptions().add(p1o1);
                 p1.getOptions().add(p1o2);
+
+                // Save options first to avoid DBRef error
+                pollOptionRepository.save(p1o1);
+                pollOptionRepository.save(p1o2);
+
                 pollRepository.save(p1);
                 logger.info("Poll 'Revision Week' seeded.");
             }
@@ -164,6 +173,7 @@ public class DataInitializer implements CommandLineRunner {
                     o.setText(opt);
                     o.setPoll(p2);
                     o.setVotes((int) (Math.random() * 30));
+                    pollOptionRepository.save(o); // Persist first
                     p2.getOptions().add(o);
                 }
                 pollRepository.save(p2);
@@ -183,6 +193,7 @@ public class DataInitializer implements CommandLineRunner {
                     o.setText(opt);
                     o.setPoll(p3);
                     o.setVotes((int) (Math.random() * 25));
+                    pollOptionRepository.save(o); // Persist first
                     p3.getOptions().add(o);
                 }
                 pollRepository.save(p3);
