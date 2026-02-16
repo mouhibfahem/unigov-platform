@@ -52,7 +52,7 @@ public class AnnouncementService {
                 .title(a.getTitle())
                 .content(a.getContent())
                 .attachmentUrl(a.getAttachmentUrl())
-                .delegateName(a.getDelegate().getFullName())
+                .delegateName(a.getDelegate() != null ? a.getDelegate().getFullName() : "Admin")
                 .createdAt(a.getCreatedAt())
                 .build();
     }

@@ -6,11 +6,11 @@ const api = axios.create({
 
 console.log('API Base URL:', api.defaults.baseURL);
 
+// Auth & User
 api.updateProfile = (data) => api.put('/users/profile', data);
 api.uploadPhoto = (formData) => api.post('/users/photo', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
 });
-
 api.getCurrentUser = () => api.get('/users/me');
 
 // Messaging
@@ -27,6 +27,17 @@ api.createEvent = (data) => api.post('/events', data);
 api.getAllDecisions = () => api.get('/decisions');
 api.createDecision = (data) => api.post('/decisions', data);
 api.deleteDecision = (id) => api.delete(`/decisions/${id}`);
+
+// Announcements
+api.getAnnouncements = () => api.get('/announcements');
+api.createAnnouncement = (formData) => api.post('/announcements', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+});
+
+// Polls
+api.getPolls = () => api.get('/polls');
+api.createPoll = (data) => api.post('/polls', data);
+api.vote = (optionId) => api.post(`/polls/${optionId}/vote`);
 
 api.interceptors.response.use(
     (response) => response,

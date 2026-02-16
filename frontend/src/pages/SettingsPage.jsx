@@ -14,7 +14,8 @@ import {
     Palette,
     Camera,
     Save,
-    CheckCircle2
+    CheckCircle2,
+    Settings
 } from 'lucide-react';
 
 const SettingsPage = () => {
@@ -31,6 +32,23 @@ const SettingsPage = () => {
         newPassword: '',
         confirmPassword: ''
     });
+
+    const [isSeeding, setIsSeeding] = useState(false);
+
+    const handleSeed = async () => {
+        if (!window.confirm("Cela va générer les données de démonstration manquantes (sondages, annonces, etc.). Continuer ?")) return;
+        setIsSeeding(true);
+        try {
+            await api.post('/auth/seed-all');
+            alert("Données générées avec succès ! Rechargez les pages pour voir les changements.");
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert("Erreur lors du seeding");
+        } finally {
+            setIsSeeding(false);
+        }
+    };
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -74,8 +92,9 @@ const SettingsPage = () => {
         { id: 'profile', label: 'Profil', icon: User },
         { id: 'appearance', label: 'Apparence', icon: Palette },
         { id: 'security', label: 'Sécurité', icon: Shield },
-        { id: 'notifications', label: 'Notifications', icon: Bell }
-    ];
+        { id: 'notifications', label: 'Notifications', icon: Bell },
+        (user?.role === 'ROLE_ADMIN' || user?.role === 'ROLE_DELEGUE') && { id: 'maintenance', label: 'Maintenance', icon: Settings }
+    ].filter(Boolean);
 
     return (
         <DashboardLayout title="Paramètres">
@@ -285,6 +304,31 @@ const SettingsPage = () => {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        )}
+
+                        {activeTab === 'maintenance' && (
+                            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-6">
+                                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">Outils de Maintenance</h3>
+                                <div className="p-6 rounded-2xl border-2 border-dashed border-slate-100 dark:border-slate-800 flex flex-col items-center text-center gap-4">
+                                    <div className="w-16 h-16 rounded-2xl bg-amber-50 dark:bg-amber-900/10 flex items-center justify-center text-amber-600">
+                                        <Save size={32} />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-slate-800 dark:text-white">Générer les données de démo</h4>
+                                        <p className="text-sm text-slate-500 max-w-sm">
+                                            Si la plateforme semble vide, utilisez ce bouton pour peupler la base de données avec des exemples d'annonces, sondages et évènements.
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={handleSeed}
+                                        disabled={isSeeding}
+                                        className="btn-primary px-10 flex items-center gap-3"
+                                    >
+                                        {isSeeding ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div> : <CheckCircle2 size={18} />}
+                                        <span>Générer les données maintenant</span>
+                                    </button>
+                                </div>
                             </div>
                         )}
 

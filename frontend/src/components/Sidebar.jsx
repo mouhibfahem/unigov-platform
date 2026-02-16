@@ -53,8 +53,9 @@ const Sidebar = () => {
         {
             title: 'OUTILS',
             items: [
+                (user?.role === 'ROLE_ADMIN' || user?.role === 'ROLE_DELEGUE') && { icon: BarChart2, label: 'Tableau de bord Admin', path: '/admin-stats' },
                 { icon: Settings, label: 'Paramètres', path: '/settings' }
-            ]
+            ].filter(Boolean)
         }
     ];
 

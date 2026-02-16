@@ -35,6 +35,7 @@ C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\repository\Poll
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\repository\UserRepository.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\security\AuthTokenFilter.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\security\JwtUtils.java
+C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\security\SimpleCORSFilter.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\security\UserDetailsImpl.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\security\UserDetailsServiceImpl.java
 C:\Users\mouhi\Downloads\UniGov\backend\src\main\java\com\unigov\security\WebSecurityConfig.java

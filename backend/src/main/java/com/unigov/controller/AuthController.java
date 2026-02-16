@@ -102,9 +102,9 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    @PostMapping("/seed")
-    public ResponseEntity<?> manualSeed() {
-        dataInitializer.seedUsers();
-        return ResponseEntity.ok("Seeding complete. Check contacts again.");
+    @PostMapping("/seed-all")
+    public ResponseEntity<?> manualSeedAll() {
+        dataInitializer.seedAllData();
+        return ResponseEntity.ok(new MessageResponse("Seeding complete. Default data ensures common items exist."));
     }
 }

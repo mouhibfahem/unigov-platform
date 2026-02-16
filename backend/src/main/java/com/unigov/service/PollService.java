@@ -65,18 +65,21 @@ public class PollService {
         }
 
         private PollResponse mapToResponse(Poll poll) {
+                List<OptionResponse> items = poll.getOptions() != null ? poll.getOptions().stream()
+                                .filter(java.util.Objects::nonNull)
+                                .map(o -> OptionResponse.builder()
+                                                .id(o.getId())
+                                                .text(o.getText())
+                                                .votes(o.getVotes())
+                                                .build())
+                                .collect(Collectors.toList()) : java.util.Collections.emptyList();
+
                 return PollResponse.builder()
                                 .id(poll.getId())
                                 .question(poll.getQuestion())
                                 .active(poll.isActive())
                                 .createdAt(poll.getCreatedAt())
-                                .options(poll.getOptions().stream()
-                                                .map(o -> OptionResponse.builder()
-                                                                .id(o.getId())
-                                                                .text(o.getText())
-                                                                .votes(o.getVotes())
-                                                                .build())
-                                                .collect(Collectors.toList()))
+                                .options(items)
                                 .build();
         }
 }

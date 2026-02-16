@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import LoginPage from './pages/LoginPage';
@@ -14,6 +15,7 @@ import SettingsPage from './pages/SettingsPage';
 import HomePage from './pages/HomePage';
 import DecisionsPage from './pages/DecisionsPage';
 import SurveysPage from './pages/SurveysPage';
+import AdminDashboard from './pages/AdminDashboard';
 import './styles/index.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -22,66 +24,91 @@ const ProtectedRoute = ({ children }) => {
     return children;
 };
 
+const PageTransition = ({ children }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.3 }}
+    >
+        {children}
+    </motion.div>
+);
+
+const AnimatedRoutes = () => {
+    const location = useLocation();
+    return (
+        <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                        <PageTransition><HomePage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/complaints" element={
+                    <ProtectedRoute>
+                        <PageTransition><ComplaintsPage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/announcements" element={
+                    <ProtectedRoute>
+                        <PageTransition><AnnouncementsPage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/polls" element={
+                    <ProtectedRoute>
+                        <PageTransition><PollsPage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/regulations" element={
+                    <ProtectedRoute>
+                        <PageTransition><RegulationsPage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/procedures" element={
+                    <ProtectedRoute>
+                        <PageTransition><ProceduresPage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/messaging" element={
+                    <ProtectedRoute>
+                        <PageTransition><MessagingPage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/settings" element={
+                    <ProtectedRoute>
+                        <PageTransition><SettingsPage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/decisions" element={
+                    <ProtectedRoute>
+                        <PageTransition><DecisionsPage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/surveys" element={
+                    <ProtectedRoute>
+                        <PageTransition><SurveysPage /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/admin-stats" element={
+                    <ProtectedRoute>
+                        <PageTransition><AdminDashboard /></PageTransition>
+                    </ProtectedRoute>
+                } />
+                <Route path="/" element={<Navigate to="/dashboard" />} />
+            </Routes>
+        </AnimatePresence>
+    );
+};
+
 const App = () => {
     return (
         <AuthProvider>
             <ThemeProvider>
                 <BrowserRouter>
-                    <Routes>
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/register" element={<RegisterPage />} />
-                        <Route path="/dashboard" element={
-                            <ProtectedRoute>
-                                <HomePage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/complaints" element={
-                            <ProtectedRoute>
-                                <ComplaintsPage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/announcements" element={
-                            <ProtectedRoute>
-                                <AnnouncementsPage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/polls" element={
-                            <ProtectedRoute>
-                                <PollsPage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/regulations" element={
-                            <ProtectedRoute>
-                                <RegulationsPage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/procedures" element={
-                            <ProtectedRoute>
-                                <ProceduresPage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/messaging" element={
-                            <ProtectedRoute>
-                                <MessagingPage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/settings" element={
-                            <ProtectedRoute>
-                                <SettingsPage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/decisions" element={
-                            <ProtectedRoute>
-                                <DecisionsPage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/surveys" element={
-                            <ProtectedRoute>
-                                <SurveysPage />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/" element={<Navigate to="/dashboard" />} />
-                    </Routes>
+                    <AnimatedRoutes />
                 </BrowserRouter>
             </ThemeProvider>
         </AuthProvider>

@@ -10,12 +10,20 @@ import {
     ArrowRight,
     AlertTriangle,
     CheckCircle2,
-    Calendar
+    Calendar,
+    Search
 } from 'lucide-react';
 import Agenda from '../components/Agenda';
 
 const HomePage = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        // For now, redirect to a search page or simply filter local items
+        alert(`Recherche pour: ${searchQuery}`);
+    };
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -114,6 +122,33 @@ const HomePage = () => {
                             />
                         ))}
                     </div>
+                </div>
+
+                {/* Global Search Bar */}
+                <div className="-mt-20 relative z-30 px-4 md:px-0">
+                    <form onSubmit={handleSearch} className="max-w-4xl mx-auto">
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-primary-500/10 blur-xl group-hover:bg-primary-500/20 transition-all rounded-[2rem]" />
+                            <div className="relative flex items-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 dark:border-slate-800/50 p-2 rounded-[2rem] shadow-2xl">
+                                <div className="pl-6 text-slate-400">
+                                    <Search size={24} />
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Rechercher une annonce, un sondage, un règlement..."
+                                    className="w-full bg-transparent border-none focus:ring-0 text-lg font-bold px-4 py-4 dark:text-white dark:placeholder-slate-500"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                                <button
+                                    type="submit"
+                                    className="btn-primary !rounded-full px-8 py-4 font-black shadow-lg shadow-primary-500/30"
+                                >
+                                    Rechercher
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
                 {/* Quick Actions Grid */}

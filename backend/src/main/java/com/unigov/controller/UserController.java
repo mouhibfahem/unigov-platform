@@ -125,7 +125,7 @@ public class UserController {
 
     @PostMapping("/seed")
     public ResponseEntity<?> manualSeed() {
-        dataInitializer.seedUsers();
+        dataInitializer.seedAllData();
         return ResponseEntity.ok("Seeding complete. Check contacts again.");
     }
 }
