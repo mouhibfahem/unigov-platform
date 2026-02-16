@@ -20,5 +20,8 @@ EXPOSE 8081
 
 RUN mkdir uploads
 
-# Start the application using the $PORT provided by Railway
-ENTRYPOINT java -Dserver.port=${PORT} -Xmx512m -jar app.jar
+# Start the application using variables from Railway
+ENTRYPOINT java -Dserver.port=${PORT} \
+    -Dspring.data.mongodb.uri=${MONGODB_URI} \
+    -Dunigov.app.jwtSecret=${JWT_SECRET} \
+    -Xmx512m -jar app.jar
