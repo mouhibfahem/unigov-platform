@@ -1,47 +1,35 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Logo = ({ className = "h-10 w-auto", showText = true, textColor = "text-slate-800" }) => {
     return (
-        <div className={`flex items-center gap-3 ${className}`}>
+        <Link to="/dashboard" className={`flex items-center gap-3 hover:opacity-80 transition-opacity ${className}`}>
             <div className="relative flex items-center justify-center w-10 h-10">
-                {/* Engineering Gear & Circuit Logo */}
+                {/* University Building Logo (Classical Style) */}
                 <svg
                     viewBox="0 0 100 100"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-full h-full drop-shadow-sm"
                 >
-                    {/* Hexagonal Nut / Gear Shape */}
+                    {/* Pediment (Triangle Top) */}
                     <path
-                        d="M50 10 L85 30 V70 L50 90 L15 70 V30 Z"
-                        className="text-primary-600 stroke-current"
-                        strokeWidth="8"
-                        strokeLinejoin="round"
+                        d="M50 15 L15 35 H85 L50 15 Z"
+                        className="text-primary-600 fill-current"
                     />
+                    {/* Circle in Pediment */}
+                    <circle cx="50" cy="27" r="3" className="fill-white opacity-80" />
 
-                    {/* Internal Circuit Lines */}
-                    <path
-                        d="M50 50 L85 30"
-                        className="text-primary-400 stroke-current"
-                        strokeWidth="4"
-                    />
-                    <path
-                        d="M50 50 L15 30"
-                        className="text-primary-400 stroke-current"
-                        strokeWidth="4"
-                    />
-                    <path
-                        d="M50 50 V90"
-                        className="text-primary-400 stroke-current"
-                        strokeWidth="4"
-                    />
+                    {/* Columns */}
+                    <rect x="22" y="38" width="6" height="35" rx="1" className="text-primary-500 fill-current" />
+                    <rect x="40" y="38" width="6" height="35" rx="1" className="text-primary-500 fill-current" />
+                    <rect x="54" y="38" width="6" height="35" rx="1" className="text-primary-500 fill-current" />
+                    <rect x="72" y="38" width="6" height="35" rx="1" className="text-primary-500 fill-current" />
 
-                    {/* Central Core / Vertex */}
-                    <circle cx="50" cy="50" r="8" className="fill-white" />
-                    <circle cx="50" cy="50" r="4" className="fill-primary-700" />
-
-                    {/* Digital Node Dot */}
-                    <circle cx="85" cy="30" r="5" className="fill-secondary-500" />
+                    {/* Column Connectors (Header & Base) */}
+                    <rect x="18" y="35" width="64" height="4" rx="1" className="text-primary-400 fill-current" />
+                    <rect x="15" y="73" width="70" height="6" rx="2" className="text-primary-600 fill-current" />
+                    <rect x="10" y="79" width="80" height="4" rx="2" className="text-primary-700 fill-current" />
                 </svg>
             </div>
 
@@ -50,12 +38,12 @@ const Logo = ({ className = "h-10 w-auto", showText = true, textColor = "text-sl
                     <span className={`text-xl font-bold tracking-tight leading-none ${textColor}`}>
                         Eni<span className="text-primary-600">Gov</span>
                     </span>
-                    <span className="text-[8px] font-bold text-slate-400 tracking-[0.2em] uppercase leading-none mt-0.5">
+                    <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase leading-none mt-0.5">
                         Univ. Carthage
                     </span>
                 </div>
             )}
-        </div>
+        </Link>
     );
 };
 

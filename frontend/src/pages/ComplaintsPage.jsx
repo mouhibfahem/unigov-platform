@@ -11,7 +11,9 @@ import {
     AlertCircle,
     MoreVertical,
     MessageSquare,
-    AlertTriangle
+    AlertTriangle,
+    Trash2,
+    Check
 } from 'lucide-react';
 
 const ComplaintsPage = () => {
@@ -20,10 +22,11 @@ const ComplaintsPage = () => {
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
         title: '',
-        category: 'Exams',
+        category: 'Examens',
         description: '',
         priority: 'MEDIUM'
     });
+    const [file, setFile] = useState(null);
     const { user } = useAuth();
 
     useEffect(() => {
@@ -45,12 +48,27 @@ const ComplaintsPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/complaints', formData);
+            const data = new FormData();
+            data.append('title', formData.title);
+            data.append('description', formData.description);
+            data.append('category', formData.category);
+            data.append('priority', formData.priority);
+
+            if (file) {
+                data.append('file', file);
+            }
+
+            await api.post('/complaints', data);
+
             setShowForm(false);
-            setFormData({ title: '', category: 'Exams', description: '', priority: 'MEDIUM' });
+            setFormData({ title: '', category: 'Examens', description: '', priority: 'MEDIUM' });
+            setFile(null);
             fetchComplaints();
         } catch (err) {
-            alert('Failed to submit complaint');
+            console.error('Submission error:', err.response || err);
+            const status = err.response?.status;
+            const message = err.response?.data?.message || err.message;
+            alert(`Échec de la soumission: ${status ? 'Erreur ' + status : ''} ${message}`);
         }
     };
 
@@ -63,11 +81,55 @@ const ComplaintsPage = () => {
         }
     };
 
+    const getPriorityLabel = (p) => {
+        switch (p) {
+            case 'URGENT': return 'Urgente';
+            case 'HIGH': return 'Haute';
+            case 'MEDIUM': return 'Moyenne';
+            case 'LOW': return 'Basse';
+            default: return p;
+        }
+    };
+
+    const getStatusLabel = (s) => {
+        switch (s) {
+            case 'RESOLVED': return 'Résolue';
+            case 'IN_PROGRESS': return 'En cours';
+            case 'PENDING': return 'En attente';
+            default: return s;
+        }
+    };
+
     const getStatusIcon = (s) => {
         switch (s) {
             case 'RESOLVED': return <CheckCircle2 className="text-green-500" size={18} />;
             case 'IN_PROGRESS': return <Clock className="text-orange-500" size={18} />;
             default: return <AlertCircle className="text-slate-400" size={18} />;
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?')) return;
+        try {
+            await api.delete(`/complaints/${id}`);
+            fetchComplaints();
+        } catch (err) {
+            console.error('Failed to delete complaint:', err.response || err);
+            const status = err.response?.status;
+            const message = err.response?.data?.message || err.message;
+            alert(`Échec de la suppression: ${status ? 'Erreur ' + status : ''} ${message}`);
+        }
+    };
+
+    const handleResolve = async (id) => {
+        try {
+            await api.put(`/complaints/${id}`, { status: 'RESOLVED' });
+            fetchComplaints();
+        } catch (err) {
+            console.error('Failed to resolve complaint:', err.response || err);
+            const status = err.response?.status;
+            const message = err.response?.data?.message || err.message;
+            alert(`Échec de la mise à jour: ${status ? 'Erreur ' + status : ''} ${message}`);
         }
     };
 
@@ -87,7 +149,7 @@ const ComplaintsPage = () => {
                         </button>
                     </div>
 
-                    {user.role === 'ROLE_STUDENT' && (
+                    {user?.role === 'ROLE_STUDENT' && (
                         <button
                             onClick={() => setShowForm(true)}
                             className="btn-primary flex items-center gap-2"
@@ -101,14 +163,14 @@ const ComplaintsPage = () => {
                 {/* Form Modal */}
                 {showForm && (
                     <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden animate-in fade-in zoom-in duration-200">
-                            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                                <h3 className="text-xl font-bold text-slate-800">Soumettre une Réclamation</h3>
+                        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden animate-in fade-in zoom-in duration-200">
+                            <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                                <h3 className="text-xl font-bold text-slate-800 dark:text-white">Soumettre une Réclamation</h3>
                                 <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-slate-600">✕</button>
                             </div>
                             <form onSubmit={handleSubmit} className="p-6 space-y-4">
                                 <div className="space-y-1">
-                                    <label className="text-sm font-bold text-slate-700">Objet / Titre</label>
+                                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Objet / Titre</label>
                                     <input
                                         className="input"
                                         value={formData.title}
@@ -119,13 +181,13 @@ const ComplaintsPage = () => {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1">
-                                        <label className="text-sm font-bold text-slate-700">Catégorie</label>
+                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Catégorie</label>
                                         <select
                                             className="input"
                                             value={formData.category}
                                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                         >
-                                            <option value="Exams">Examens</option>
+                                            <option value="Examens">Examens</option>
                                             <option value="Absences">Absences</option>
                                             <option value="Infrastructure">Infrastructure</option>
                                             <option value="Discipline">Discipline</option>
@@ -133,7 +195,7 @@ const ComplaintsPage = () => {
                                         </select>
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-sm font-bold text-slate-700">Niveau de Priorité</label>
+                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Niveau de Priorité</label>
                                         <select
                                             className="input"
                                             value={formData.priority}
@@ -147,7 +209,7 @@ const ComplaintsPage = () => {
                                     </div>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-sm font-bold text-slate-700">Description Détaillée</label>
+                                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Description Détaillée</label>
                                     <textarea
                                         className="input min-h-[120px]"
                                         value={formData.description}
@@ -156,6 +218,29 @@ const ComplaintsPage = () => {
                                         required
                                     ></textarea>
                                 </div>
+
+                                <div className="space-y-1">
+                                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Pièce Jointe (Optionnel - PDF, Image)</label>
+                                    <div className="relative">
+                                        <input
+                                            type="file"
+                                            onChange={(e) => setFile(e.target.files[0])}
+                                            className="hidden"
+                                            id="file-upload"
+                                            accept="image/*,application/pdf"
+                                        />
+                                        <label
+                                            htmlFor="file-upload"
+                                            className="flex items-center justify-center gap-2 w-full p-4 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                                        >
+                                            <Plus size={20} className="text-slate-400" />
+                                            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                                                {file ? file.name : 'Cliquez pour sélectionner un fichier'}
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <div className="flex justify-end gap-3 mt-6">
                                     <button type="button" onClick={() => setShowForm(false)} className="px-6 py-2 text-slate-600 font-medium hover:bg-slate-50 rounded-lg">Annuler</button>
                                     <button type="submit" className="btn-primary px-8">Soumettre</button>
@@ -166,60 +251,88 @@ const ComplaintsPage = () => {
                 )}
 
                 {/* Content */}
-                <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-4">
                     {loading ? (
                         <div className="py-20 flex justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div></div>
                     ) : complaints.length === 0 ? (
-                        <div className="bg-white rounded-2xl p-20 text-center border border-dashed border-slate-200">
-                            <div className="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div className="card p-20 text-center border-dashed border-slate-200 dark:border-slate-800">
+                            <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 text-slate-300 dark:text-slate-600 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <MessageSquare size={32} />
                             </div>
-                            <p className="text-slate-400 font-medium">Aucune réclamation trouvée pour le moment.</p>
+                            <p className="text-slate-400 dark:text-slate-500 font-medium">Aucune réclamation trouvée pour le moment.</p>
                         </div>
                     ) : (
-                        complaints.map((c) => (
-                            <div key={c.id} className="card group hover:border-primary-100 transition-all cursor-pointer">
+                        complaints.map((complaint) => (
+                            <div key={complaint.id} className="card hover:shadow-md transition-all group">
                                 <div className="flex items-start justify-between">
-                                    <div className="flex gap-4">
-                                        <div className={`mt-1 flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ${getPriorityColor(c.priority)}`}>
-                                            <AlertTriangle size={20} />
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-3">
+                                            <h4 className="font-bold text-slate-800 dark:text-slate-100">{complaint.title}</h4>
+                                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${getPriorityColor(complaint.priority)}`}>
+                                                {getPriorityLabel(complaint.priority)}
+                                            </span>
                                         </div>
-                                        <div>
-                                            <div className="flex items-center gap-3 mb-1">
-                                                <h4 className="font-bold text-slate-800">{c.title}</h4>
-                                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${getPriorityColor(c.priority)}`}>
-                                                    {c.priority}
-                                                </span>
-                                            </div>
-                                            <p className="text-slate-500 text-sm line-clamp-1 mb-2">{c.description}</p>
-                                            <div className="flex items-center gap-4 text-xs font-medium text-slate-400">
-                                                <span className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
-                                                    {getStatusIcon(c.status)}
-                                                    {c.status.replace('_', ' ')}
-                                                </span>
-                                                <span>•</span>
-                                                <span>{c.category}</span>
-                                                <span>•</span>
-                                                <span>{new Date(c.createdAt).toLocaleDateString()}</span>
-                                                {user.role !== 'ROLE_STUDENT' && (
-                                                    <>
-                                                        <span>•</span>
-                                                        <span className="text-primary-600 font-bold">Par {c.studentName}</span>
-                                                    </>
-                                                )}
-                                            </div>
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm line-clamp-1">{complaint.description}</p>
+                                        <div className="flex items-center gap-4 text-xs font-medium text-slate-400">
+                                            <span className="flex items-center gap-1.5 dark:text-slate-500">
+                                                {getStatusIcon(complaint.status)}
+                                                {getStatusLabel(complaint.status)}
+                                            </span>
+                                            <span>•</span>
+                                            <span className="dark:text-slate-500">{complaint.category}</span>
+                                            <span>•</span>
+                                            <span className="dark:text-slate-500">{new Date(complaint.createdAt).toLocaleDateString()}</span>
+                                            {complaint.attachmentPath && (
+                                                <>
+                                                    <span>•</span>
+                                                    <a
+                                                        href={`http://localhost:8080/uploads/${complaint.attachmentPath}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-primary-600 font-bold hover:underline"
+                                                    >
+                                                        Voir pièce jointe
+                                                    </a>
+                                                </>
+                                            )}
+                                            {user.role !== 'ROLE_STUDENT' && (
+                                                <>
+                                                    <span>•</span>
+                                                    <span className="text-primary-600 dark:text-primary-400 font-bold">Par {complaint.studentName}</span>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
-                                    <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg">
-                                        <MoreVertical size={20} />
-                                    </button>
+                                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        {user.role !== 'ROLE_STUDENT' && complaint.status !== 'RESOLVED' && (
+                                            <button
+                                                onClick={() => handleResolve(complaint.id)}
+                                                className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                                title="Marquer comme résolue"
+                                            >
+                                                <Check size={18} />
+                                            </button>
+                                        )}
+                                        {user.role !== 'ROLE_STUDENT' && (
+                                            <button
+                                                onClick={() => handleDelete(complaint.id)}
+                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                title="Supprimer"
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
+                                        )}
+                                        <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">
+                                            <MoreVertical size={20} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))
                     )}
                 </div>
-            </div>
-        </DashboardLayout>
+            </div >
+        </DashboardLayout >
     );
 };
 

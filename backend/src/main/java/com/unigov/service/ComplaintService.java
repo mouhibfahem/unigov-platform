@@ -7,8 +7,11 @@ import com.unigov.entity.User;
 import com.unigov.repository.ComplaintRepository;
 import com.unigov.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,8 +25,13 @@ public class ComplaintService {
     @Autowired
     private UserRepository userRepository;
 
+    @Value("${file.upload-dir:uploads}")
+    private String uploadDir;
+
+    private static final Logger logger = LoggerFactory.getLogger(ComplaintService.class);
+
     @Transactional
-    public ComplaintResponse createComplaint(ComplaintRequest request, String username) {
+    public ComplaintResponse createComplaint(ComplaintRequest request, String username, String attachmentPath) {
         User student = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -34,6 +42,7 @@ public class ComplaintService {
         complaint.setPriority(request.getPriority() != null ? request.getPriority() : ComplaintPriority.MEDIUM);
         complaint.setStatus(ComplaintStatus.PENDING);
         complaint.setStudent(student);
+        complaint.setAttachmentPath(attachmentPath);
 
         Complaint saved = complaintRepository.save(complaint);
         return mapToResponse(saved);
@@ -69,6 +78,28 @@ public class ComplaintService {
 
         Complaint saved = complaintRepository.save(complaint);
         return mapToResponse(saved);
+    }
+
+    @Transactional
+    public void deleteComplaint(Long id) {
+        logger.info("Attempting to delete complaint with ID: {}", id);
+        Complaint complaint = complaintRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Complaint not found"));
+
+        // Delete attachment if exists
+        if (complaint.getAttachmentPath() != null) {
+            try {
+                java.nio.file.Path rootLocation = java.nio.file.Paths.get(uploadDir).toAbsolutePath().normalize();
+                java.nio.file.Path filePath = rootLocation.resolve(complaint.getAttachmentPath()).normalize();
+                logger.info("Deleting attachment file: {}", filePath);
+                java.nio.file.Files.deleteIfExists(filePath);
+            } catch (java.io.IOException e) {
+                logger.error("Failed to delete attachment: {}", e.getMessage());
+            }
+        }
+
+        complaintRepository.delete(complaint);
+        logger.info("Complaint with ID: {} deleted successfully", id);
     }
 
     private ComplaintResponse mapToResponse(Complaint complaint) {

@@ -11,28 +11,31 @@ body {
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f8fafc;
-  color: #1e293b;
+  @apply bg-slate-50 text-slate-900 transition-colors duration-300;
+}
+
+.dark body {
+  @apply bg-slate-950 text-slate-100;
 }
 
 @layer components {
   .btn-primary {
     @apply px-4 py-2 bg-primary-600 text-white rounded-lg font-medium transition-all hover:bg-primary-700 active:transform active:scale-95 shadow-sm;
   }
-  
+
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-slate-100 p-6;
+    @apply bg-white rounded-xl shadow-sm border border-slate-100 p-6 transition-all duration-300;
+    @apply dark:bg-slate-900 dark:border-slate-800 dark:shadow-none;
   }
-  
+
   .input {
     @apply w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all;
+    @apply dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:placeholder-slate-500;
   }
 }
 
 /* Glassmorphism utility */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  @apply bg-white/70 backdrop-blur-md border border-white/30 transition-all duration-300;
+  @apply dark:bg-slate-900/70 dark:border-slate-800/30;
 }

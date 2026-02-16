@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { BarChart3, Clock, CheckCircle, Plus, PieChart as PieChartIcon } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
@@ -11,6 +12,7 @@ const PollsPage = () => {
     const [loading, setLoading] = useState(true);
     const [newPoll, setNewPoll] = useState({ question: '', options: ['', ''] });
     const { user } = useAuth();
+    const { theme } = useTheme();
 
     useEffect(() => {
         fetchPolls();
@@ -114,34 +116,34 @@ const PollsPage = () => {
                         <div className="col-span-full py-20 flex justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div></div>
                     ) : polls.map((poll) => (
                         <div key={poll.id} className="card h-full flex flex-col hover:shadow-lg transition-shadow">
-                            <div className="flex items-center gap-2 text-primary-600 mb-4 tracking-tighter uppercase font-bold text-[10px]">
+                            <div className="flex items-center gap-2 text-primary-600 dark:text-primary-400 mb-4 tracking-tighter uppercase font-bold text-[10px]">
                                 <Clock size={12} />
                                 Sondage en cours
                             </div>
-                            <h4 className="text-xl font-bold text-slate-800 mb-8">{poll.question}</h4>
+                            <h4 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-tight">{poll.question}</h4>
 
                             <div className="space-y-3 flex-1">
                                 {poll.options.map((opt) => (
                                     <button
                                         key={opt.id}
                                         onClick={() => handleVote(opt.id)}
-                                        className="w-full text-left p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-primary-300 hover:bg-white transition-all group relative overflow-hidden"
+                                        className="w-full text-left p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 hover:border-primary-300 dark:hover:border-primary-700 hover:bg-white dark:hover:bg-slate-800 transition-all group relative overflow-hidden"
                                     >
                                         <div className="flex items-center justify-between relative z-10">
-                                            <span className="font-medium text-slate-700 group-hover:text-primary-600">{opt.text}</span>
-                                            <span className="text-sm font-bold text-slate-400 group-hover:text-primary-500">{opt.votes} votes</span>
+                                            <span className="font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary-600 dark:group-hover:text-primary-400">{opt.text}</span>
+                                            <span className="text-sm font-bold text-slate-400 dark:text-slate-500 group-hover:text-primary-500">{opt.votes} votes</span>
                                         </div>
                                     </button>
                                 ))}
                             </div>
 
-                            <div className="mt-8 h-48 w-full border-t border-slate-50 pt-6">
+                            <div className="mt-8 h-48 w-full border-t border-slate-50 dark:border-slate-800 pt-6">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={poll.options} layout="vertical">
-                                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={theme === 'dark' ? '#1e293b' : '#f1f5f9'} />
                                         <XAxis type="number" hide />
-                                        <YAxis dataKey="text" type="category" width={80} tick={{ fontSize: 10, fontWeight: 600, fill: '#64748b' }} />
-                                        <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
+                                        <YAxis dataKey="text" type="category" width={80} tick={{ fontSize: 10, fontWeight: 600, fill: theme === 'dark' ? '#94a3b8' : '#64748b' }} />
+                                        <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '12px', background: theme === 'dark' ? '#0f172a' : '#fff', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', color: theme === 'dark' ? '#f1f5f9' : '#1e293b' }} />
                                         <Bar dataKey="votes" radius={[0, 4, 4, 0]} barSize={20}>
                                             {poll.options.map((entry, index) => (
                                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

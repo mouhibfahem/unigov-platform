@@ -15,10 +15,17 @@ public class DataInitializer implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 
     private final UserRepository userRepository;
+    private final com.unigov.repository.ComplaintRepository complaintRepository;
+    private final com.unigov.repository.PollRepository pollRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(UserRepository userRepository,
+            com.unigov.repository.ComplaintRepository complaintRepository,
+            com.unigov.repository.PollRepository pollRepository,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.complaintRepository = complaintRepository;
+        this.pollRepository = pollRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -45,7 +52,7 @@ public class DataInitializer implements CommandLineRunner {
             student.setUsername("etudiant1");
             student.setEmail("etudiant@unigov.com");
             student.setPassword(passwordEncoder.encode("etudiant123"));
-            student.setFullName("Etudiant Test");
+            student.setFullName("Etudiant Amri Mahmoud");
             student.setRole(Role.ROLE_STUDENT);
             userRepository.save(student);
 
@@ -55,7 +62,103 @@ public class DataInitializer implements CommandLineRunner {
             logger.info("Student:  etudiant1 / etudiant123");
             logger.info("================================");
         } else {
-            logger.info("Users already exist, skipping data initialization.");
+            logger.info("Users already exist, skipping user creation.");
+        }
+
+        // Seed Complaints if none exist
+        if (complaintRepository.count() == 0) {
+            User student = userRepository.findByUsername("etudiant1").orElse(null);
+
+            if (student != null) {
+                // Cafeteria Complaint
+                com.unigov.entity.Complaint c1 = new com.unigov.entity.Complaint();
+                c1.setTitle("État de la buvette annexe");
+                c1.setDescription(
+                        "L'état de la buvette de l'annexe est déplorable. Hygiène douteuse et manque de choix.");
+                c1.setCategory("Infrastructure");
+                c1.setPriority(com.unigov.entity.ComplaintEnums.ComplaintPriority.HIGH);
+                c1.setStatus(com.unigov.entity.ComplaintEnums.ComplaintStatus.PENDING);
+                c1.setStudent(student);
+                complaintRepository.save(c1);
+
+                // Exam Results Complaint
+                com.unigov.entity.Complaint c2 = new com.unigov.entity.Complaint();
+                c2.setTitle("Retard affichage notes examens");
+                c2.setDescription(
+                        "Les notes devaient être affichées le 25/02 comme prévu par le règlement. Le retard est inacceptable.");
+                c2.setCategory("Exams");
+                c2.setPriority(com.unigov.entity.ComplaintEnums.ComplaintPriority.URGENT);
+                c2.setStatus(com.unigov.entity.ComplaintEnums.ComplaintStatus.IN_PROGRESS);
+                c2.setStudent(student);
+                complaintRepository.save(c2);
+
+                logger.info("=== Demo Complaints created ===");
+            }
+        }
+
+        // Seed Polls if none exist / check for specific ones
+        User delegue = userRepository.findByUsername("mouhib_fahem").orElse(null);
+        if (delegue != null) {
+            // Poll 1: Revision Week
+            String q1 = "Êtes-vous favorables à une semaine de révision supplémentaire avant les rattrapages ?";
+            if (pollRepository.findByQuestion(q1).isEmpty()) {
+                com.unigov.entity.Poll p1 = new com.unigov.entity.Poll();
+                p1.setQuestion(q1);
+                p1.setCreator(delegue);
+
+                com.unigov.entity.PollOption p1o1 = new com.unigov.entity.PollOption();
+                p1o1.setText("Oui, c'est indispensable");
+                p1o1.setPoll(p1);
+                p1o1.setVotes(45);
+
+                com.unigov.entity.PollOption p1o2 = new com.unigov.entity.PollOption();
+                p1o2.setText("Non, je préfère finir plus tôt");
+                p1o2.setPoll(p1);
+                p1o2.setVotes(12);
+
+                p1.getOptions().add(p1o1);
+                p1.getOptions().add(p1o2);
+                pollRepository.save(p1);
+                logger.info("Poll 'Revision Week' seeded.");
+            }
+
+            // Poll 2: Cafeteria Services
+            String q2 = "Quel nouveau service souhaiteriez-vous à la buvette annexe ?";
+            if (pollRepository.findByQuestion(q2).isEmpty()) {
+                com.unigov.entity.Poll p2 = new com.unigov.entity.Poll();
+                p2.setQuestion(q2);
+                p2.setCreator(delegue);
+
+                String[] p2opts = { "Plus de choix de plats", "Paiement mobile", "Micro-ondes", "Autre" };
+                for (String opt : p2opts) {
+                    com.unigov.entity.PollOption o = new com.unigov.entity.PollOption();
+                    o.setText(opt);
+                    o.setPoll(p2);
+                    o.setVotes((int) (Math.random() * 30));
+                    p2.getOptions().add(o);
+                }
+                pollRepository.save(p2);
+                logger.info("Poll 'Cafeteria' seeded.");
+            }
+
+            // Poll 3: Satisfaction
+            String q3 = "Globalement, comment jugez-vous la réactivité de l'administration ce semestre ?";
+            if (pollRepository.findByQuestion(q3).isEmpty()) {
+                com.unigov.entity.Poll p3 = new com.unigov.entity.Poll();
+                p3.setQuestion(q3);
+                p3.setCreator(delegue);
+
+                String[] p3opts = { "Excellente", "Bonne", "Passable", "Mauvaise" };
+                for (String opt : p3opts) {
+                    com.unigov.entity.PollOption o = new com.unigov.entity.PollOption();
+                    o.setText(opt);
+                    o.setPoll(p3);
+                    o.setVotes((int) (Math.random() * 25));
+                    p3.getOptions().add(o);
+                }
+                pollRepository.save(p3);
+                logger.info("Poll 'Satisfaction' seeded.");
+            }
         }
     }
 }

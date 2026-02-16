@@ -83,40 +83,37 @@ const AnnouncementsPage = () => {
                     </div>
                 )}
 
-                <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {loading ? (
-                        <div className="py-20 flex justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div></div>
+                        <div className="col-span-full py-20 flex justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600"></div></div>
                     ) : announcements.length === 0 ? (
-                        <div className="text-center py-20 text-slate-400">Aucune annonce pour le moment.</div>
+                        <div className="col-span-full text-center py-20 text-slate-400">Aucune annonce pour le moment.</div>
                     ) : (
-                        announcements.map((a) => (
-                            <div key={a.id} className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm relative overflow-hidden group transition-all hover:shadow-md">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-primary-500"></div>
-                                <div className="flex items-center justify-between mb-6">
-                                    <div className="flex items-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                                        <span className="flex items-center gap-1.5 text-primary-600">
-                                            <Megaphone size={14} />
-                                            Officiel
-                                        </span>
-                                        <span>•</span>
-                                        <span className="flex items-center gap-1.5">
-                                            <Calendar size={14} />
-                                            {new Date(a.createdAt).toLocaleDateString()}
-                                        </span>
+                        announcements.map((announcement) => (
+                            <div key={announcement.id} className="card flex flex-col group hover:shadow-md transition-all">
+                                <div className="flex items-center justify-between mb-4">
+                                    <span className="bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                                        Officiel
+                                    </span>
+                                    <div className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500 text-[10px] font-bold uppercase">
+                                        <Calendar size={12} />
+                                        {new Date(announcement.createdAt).toLocaleDateString()}
                                     </div>
-                                    {user.role !== 'ROLE_STUDENT' && (
+                                </div>
+                                <h4 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4 leading-tight group-hover:text-primary-600 transition-colors">{announcement.title}</h4>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm flex-1 leading-relaxed whitespace-pre-wrap mb-6">{announcement.content}</p>
+                                <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50 dark:border-slate-800">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-lg flex items-center justify-center font-bold text-xs uppercase">
+                                            {announcement.delegateName?.charAt(0) || 'A'}
+                                        </div>
+                                        <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tight">Publié par {announcement.delegateName || 'Admin'}</span>
+                                    </div>
+                                    {user?.role !== 'ROLE_STUDENT' && (
                                         <button className="text-slate-300 hover:text-red-500 transition-colors">
                                             <Trash2 size={18} />
                                         </button>
                                     )}
-                                </div>
-                                <h3 className="text-2xl font-bold text-slate-800 mb-4">{a.title}</h3>
-                                <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">{a.content}</p>
-                                <div className="mt-8 pt-6 border-t border-slate-50 flex items-center gap-3">
-                                    <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-500 font-bold text-xs uppercase">
-                                        {a.delegateName.charAt(0)}
-                                    </div>
-                                    <span className="text-sm font-bold text-slate-500 tracking-tight">Publié par {a.delegateName}</span>
                                 </div>
                             </div>
                         ))

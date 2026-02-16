@@ -4,7 +4,15 @@ import api from '../services/api';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+    const [user, setUser] = useState(() => {
+        try {
+            const savedUser = localStorage.getItem('user');
+            return savedUser ? JSON.parse(savedUser) : null;
+        } catch (error) {
+            console.error('Failed to parse user from localStorage', error);
+            return null;
+        }
+    });
 
     const login = async (username, password) => {
         const response = await api.post('/auth/signin', { username, password });
