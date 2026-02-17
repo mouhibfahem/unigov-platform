@@ -24,7 +24,8 @@ const AdminDashboard = () => {
     const stats = [
         { label: 'Total Étudiants', value: '1,280', icon: Users, color: 'bg-blue-500/20 text-blue-500' },
         { label: 'Réclamations Actives', value: '24', icon: AlertTriangle, color: 'bg-orange-500/20 text-orange-500' },
-        { label: 'Sondages en cours', value: '8', icon: Activity, icon: Activity, color: 'bg-emerald-500/20 text-emerald-500' },
+        { label: 'Sondages en cours', value: '8', icon: Activity, color: 'bg-emerald-500/20 text-emerald-500' },
+
         { label: 'Messages du jour', value: '156', icon: MessageSquare, color: 'bg-purple-500/20 text-purple-500' },
     ];
 
