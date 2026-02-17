@@ -2,23 +2,30 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy all files to handle the monorepo structure
-COPY . .
+# Copy only backend pom first for dependency caching
+COPY backend/pom.xml backend/pom.xml
+RUN mvn -f backend/pom.xml dependency:go-offline -B
 
-# Build only the backend module
-RUN mvn -f backend/pom.xml clean package -DskipTests
+# Copy backend source
+COPY backend/src backend/src
+
+# Build
+RUN mvn -f backend/pom.xml clean package -DskipTests -B
 
 # Run stage
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copy the jar from the backend target
-COPY --from=build /app/backend/target/*.jar app.jar
+# Copy the specific repackaged jar (not the .original)
+COPY --from=build /app/backend/target/unigov-0.0.1-SNAPSHOT.jar app.jar
 
-# Dynamic port for Railway
+# Create uploads directory
+RUN mkdir -p uploads
+
+# Expose port
 EXPOSE 8081
 
-RUN mkdir uploads
-
-# Start the application with quoted variables to handle special characters
-ENTRYPOINT ["/bin/sh", "-c", "java -Dserver.port=$PORT -Dspring.data.mongodb.uri=\"$MONGODB_URI\" -Dunigov.app.jwtSecret=\"$JWT_SECRET\" -Xmx512m -jar app.jar"]
+# Start - use shell form so env vars expand properly
+CMD java -Xmx512m \
+    -Dserver.port=${PORT:-8081} \
+    -jar app.jar
